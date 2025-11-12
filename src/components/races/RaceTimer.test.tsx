@@ -77,7 +77,7 @@ describe("RaceTimer", () => {
     const onTimeout = vi.fn();
     const expiredRace = createMockRace(-120); // 2 minutes ago
 
-    await render(<RaceTimer row={expiredRace} onTimeout={onTimeout} />);
+    await render(<RaceTimer row={expiredRace} onShouldRemove={onTimeout} />);
 
     expect(onTimeout).toHaveBeenCalled();
   });
@@ -86,7 +86,7 @@ describe("RaceTimer", () => {
     const onTimeout = vi.fn();
     const activeRace = createMockRace(60); // 1 minute in future
 
-    await render(<RaceTimer row={activeRace} onTimeout={onTimeout} />);
+    await render(<RaceTimer row={activeRace} onShouldRemove={onTimeout} />);
 
     vi.advanceTimersByTime(5000);
     expect(onTimeout).not.toHaveBeenCalled();

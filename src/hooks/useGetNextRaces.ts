@@ -1,57 +1,58 @@
+import { useCallback, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 import { fetchNextRaces } from "../api/fetch-next-races";
 import { calculateRaceTime } from "../lib/utils";
+import type { RaceSummary } from "../types";
 
 /**
  * Hook to fetch next races api data based on category and target count
  */
 export function useGetNextRaces() {
-  // Maintain a set of expired race IDs to prevent them from reappearing
-  const expiredRaceIds = useRef(new Set<string>());
+  const removedRaceIdsRef = useRef<Set<string>>(new Set());
 
   const queryResult = useQuery({
     queryKey: ["next-races"],
     queryFn: () => fetchNextRaces(),
-    refetchInterval: 60000, // Refetch every 60 seconds to get fresh
+    refetchInterval: 60000, // Refetch every 60 seconds to keep data fresh
     select: (res) => {
-      // Extract races array from the response json
-      const racesArray = Object.values(res.data.race_summaries);
-
       // Filter out expired races (started more than 60 seconds ago)
-      const activeRaces = racesArray.filter((race) => {
-        // Skip races that have already been marked as expired
-        if (expiredRaceIds.current.has(race.race_id)) {
-          return false;
-        }
-
+      const activeRaces: RaceSummary[] = [];
+      for (const raceId of res.data.next_to_go_ids) {
+        const raceData = res.data.race_summaries[raceId];
+        // Assumming race is always defined for ids in next_to_go_ids
         const { shouldRemove } = calculateRaceTime(
-          race.advertised_start.seconds
+          raceData.advertised_start.seconds
         );
-
-        // If race should be removed, add it to the expired set
-        if (shouldRemove) {
-          expiredRaceIds.current.add(race.race_id);
-          return false;
+        if (!shouldRemove) {
+          activeRaces.push(raceData);
         }
-
-        return true;
-      });
-
+      }
       return activeRaces;
     },
   });
 
-  // Function to mark a race as expired
-  const markRaceAsExpired = (raceId: string) => {
-    expiredRaceIds.current.add(raceId);
-    // Invalidate the query to trigger a re-render with updated filters
-    queryResult.refetch();
-  };
+  /**
+   * function to remove race from data by raceId
+   * @param race - The race to remove
+   */
+  const removeExpiredRace = useCallback(
+    ({ race_id }: RaceSummary) => {
+      removedRaceIdsRef.current.add(race_id);
+      queryResult.refetch();
+    },
+    [queryResult]
+  );
+
+  const filteredData = useMemo(() => {
+    if (!queryResult.data) return [];
+    return queryResult.data.filter(
+      (race) => !removedRaceIdsRef.current.has(race.race_id)
+    );
+  }, [queryResult.data, removedRaceIdsRef]);
 
   return {
     ...queryResult,
-    data: queryResult.data ?? [],
-    markRaceAsExpired,
+    data: filteredData,
+    removeExpiredRace,
   };
 }

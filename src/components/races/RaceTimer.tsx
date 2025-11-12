@@ -6,10 +6,10 @@ export interface RaceTimerProps {
   /** Race information */
   row: RaceSummary;
   /** Optional callback when race should be removed (started > 1 minute ago) */
-  onTimeout?: () => void;
+  onShouldRemove: (race: RaceSummary) => void;
 }
 
-export function RaceTimer({ row, onTimeout }: RaceTimerProps) {
+export function RaceTimer({ row, onShouldRemove }: RaceTimerProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const intervalRef = useRef<number | undefined>(undefined);
 
@@ -22,7 +22,7 @@ export function RaceTimer({ row, onTimeout }: RaceTimerProps) {
       // Notify parent if race should be removed
       if (result.shouldRemove) {
         clearInterval(intervalRef.current);
-        onTimeout?.();
+        onShouldRemove(row);
       }
     };
 
@@ -33,7 +33,7 @@ export function RaceTimer({ row, onTimeout }: RaceTimerProps) {
     intervalRef.current = setInterval(updateTimer, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [row, onTimeout]);
+  }, [row, onShouldRemove]);
 
   // Determine the styling based on time remaining
   const isStartingSoon =

@@ -10,7 +10,7 @@ import { RaceTimer } from "./RaceTimer";
 const LIMIT_RECORDS = 5;
 
 export function Races() {
-  const { data, isLoading, error, refetch, markRaceAsExpired } = useGetNextRaces();
+  const { data, isLoading, error, refetch, removeExpiredRace } = useGetNextRaces();
 
   const columns = useMemo<ColumnDef<RaceSummary>[]>(
     () => [
@@ -31,14 +31,11 @@ export function Races() {
         accessorKey: "advertised_start.seconds",
         header: "Time",
         cell: ({ row }) => (
-          <RaceTimer 
-            row={row.original} 
-            onTimeout={() => markRaceAsExpired(row.original.race_id)} 
-          />
+          <RaceTimer row={row.original} onShouldRemove={removeExpiredRace} />
         ),
       },
     ],
-    [markRaceAsExpired]
+    [removeExpiredRace]
   );
 
   /**
