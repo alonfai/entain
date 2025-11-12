@@ -38,7 +38,6 @@ This is a a React application that displays upcoming racing events with real-tim
 - `hooks` - Custom React hooks
 - `lib` - Utility functions
 - `styles` - Styling and theming
-- `test` - Test utilities and setup
 - `App.tsx` - Root application component
 - `main.tsx` - Application entry point
 - `constants.ts` - App constants (category IDs)
