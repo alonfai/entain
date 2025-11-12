@@ -45,14 +45,14 @@ export const THRESHOLD = 60;
  */
 export function calculateRaceTime(
   startTimeSeconds: number,
-  thresholdMinutes = THRESHOLD
+  thresholdSeconds = THRESHOLD
 ): RaceTimeResult {
   const nowInSeconds = getCurrentTimeInSeconds();
   const timeDiff = startTimeSeconds - nowInSeconds;
   const hasStarted = timeDiff <= 0;
 
   // Check if race data should be removed (started more than 1 minute ago)
-  const shouldRemove = hasStarted && Math.abs(timeDiff) >= thresholdMinutes;
+  const shouldRemove = hasStarted && Math.abs(timeDiff) >= thresholdSeconds;
 
   let timeString: string;
 
