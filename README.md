@@ -20,7 +20,7 @@ This is a a React application that displays upcoming racing events with real-tim
 - **Lucide React** - Icons library
 - **TanStack Table** - Table component
 
-### Testing
+### Testing Tools
 
 - **Vitest** - unit test framework
 - **Playwright** - Browser testing
@@ -98,11 +98,11 @@ import { Races } from "@/components/races/Races";
 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd entain-task
+git clone https://github.com/alonfai/entain
+cd entain
 ```
 
-2. Install dependencies
+2.Install dependencies
 
 ```bash
 npm install
@@ -181,6 +181,7 @@ The theming system consists of three main layers:
 Each brand defines its own color palette using CSS custom properties with the OKLCH color space for better perceptual uniformity:
 
 #### Light Theme (`src/styles/brands/light.css`)
+
 ```css
 .light {
   --custom-bg-primary: oklch(0.98 0.005 240);
@@ -191,6 +192,7 @@ Each brand defines its own color palette using CSS custom properties with the OK
 ```
 
 #### Dark Theme (`src/styles/brands/dark.css`)
+
 ```css
 .dark {
   --custom-bg-primary: oklch(0.15 0.01 240);
@@ -199,14 +201,6 @@ Each brand defines its own color palette using CSS custom properties with the OK
   /* ... more variables */
 }
 ```
-
-Each brand theme includes variables for:
-- **Background colors** - Primary, secondary, and hover states
-- **Surface colors** - Cards and elevated elements
-- **Border colors** - Default and focus states
-- **Text colors** - Primary, secondary, and muted text
-- **Accent colors** - Brand accent and hover states
-- **Status colors** - Success, warning, and error states
 
 ### Brand Context & Provider
 
@@ -248,11 +242,11 @@ To add a new brand theme:
 }
 ```
 
-3. Import the stylesheet in your main CSS file or component
-4. Update the `Brand` type in `src/context/brand/BrandContext.tsx`:
+3.Import the stylesheet in your main CSS file or component
+4.Update the `Brand` type in `src/context/brand/BrandContext.tsx`:
 
 ```typescript
 export type Brand = "dark" | "light" | "blue";
 ```
 
-5. Update the `BrandProvider` to handle the new brand class
+5.Update the `BrandProvider` to handle the new brand class
