@@ -27,7 +27,7 @@ describe("utils", () => {
       const futureTime = Math.floor(now.getTime() / 1000) + 300; // 5 minutes in future
       const result = calculateRaceTime(futureTime);
 
-      expect(result.timeString).toBe("5m 0s");
+      expect(result.timeString).toBe("5m 0s To Start");
       expect(result.shouldRemove).toBe(false);
       expect(result.hasStarted).toBe(false);
       expect(result.timeDiff).toBe(300);

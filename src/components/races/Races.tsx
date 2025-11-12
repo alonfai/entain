@@ -29,7 +29,7 @@ export function Races() {
       },
       {
         accessorKey: "advertised_start.seconds",
-        header: "Time To Start",
+        header: "Time",
         cell: ({ row }) => <RaceTimer row={row.original} onTimeout={refetch} />,
       },
     ],

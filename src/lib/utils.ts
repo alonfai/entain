@@ -66,7 +66,7 @@ export function calculateRaceTime(
     // Race hasn't started, show countdown
     const minutes = Math.floor(timeDiff / 60);
     const seconds = timeDiff % 60;
-    timeString = `${minutes}m ${seconds}s`;
+    timeString = `${minutes}m ${seconds}s To Start`;
   }
 
   return {
