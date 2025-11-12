@@ -6,16 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Global current time in seconds (Unix timestamp)
- * Initialized once when the module loads
- */
-export const NOW_IN_SECONDS = Math.floor(Date.now() / 1000);
-
-/**
  * Get current time in seconds (Unix timestamp)
  * Returns the global NOW_IN_SECONDS value for consistency across the app
  */
-export function getCurrentTimeInSeconds(): number {
+export function getCurrentTimeInSeconds() {
   return Math.floor(Date.now() / 1000);
 }
 
