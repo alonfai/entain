@@ -23,7 +23,7 @@ export function useGetNextRaces({ categoryName }: UseGetNextRacesParams = {}) {
     : undefined;
 
   const queryResult = useQuery({
-    queryKey: ["next-races"],
+    queryKey: ["next-races", selectedCategoryId],
     queryFn: () => fetchNextRaces(),
     // refetchInterval: 10000, // Refetch every 10 seconds to get fresh races
     select: (res) => {
@@ -32,7 +32,9 @@ export function useGetNextRaces({ categoryName }: UseGetNextRacesParams = {}) {
 
       // Filter out expired races (started more than 60 seconds ago)
       const activeRaces = racesArray.filter((race) => {
-        const { shouldRemove } = calculateRaceTime(race.advertised_start.seconds);
+        const { shouldRemove } = calculateRaceTime(
+          race.advertised_start.seconds
+        );
         return !shouldRemove;
       });
 
