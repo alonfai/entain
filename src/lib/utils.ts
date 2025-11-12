@@ -41,6 +41,7 @@ export const THRESHOLD = 60;
 /**
  * Calculate the time remaining or elapsed for a race
  * @param startTimeSeconds - Race start time in seconds (Unix timestamp)
+ * @param thresholdSeconds - Threshold in seconds to determine removal (default: 60s)
  * @returns RaceTimeResult with formatted string and removal flag
  */
 export function calculateRaceTime(
