@@ -20,9 +20,9 @@ export function RaceTimer({ row, onTimeout }: RaceTimerProps) {
       setTimeRemaining(result.timeString);
 
       // Notify parent if race should be removed
-      if (result.shouldRemove && onTimeout) {
+      if (result.shouldRemove) {
         clearInterval(intervalRef.current);
-        onTimeout();
+        onTimeout?.();
       }
     };
 
