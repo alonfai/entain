@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getCurrentTimeInSeconds, calculateRaceTime, THRESHOLD } from "./utils";
+import { THRESHOLD } from "../constants";
+import { getCurrentTimeInSeconds, calculateRaceTime } from "./utils";
 
 describe("utils", () => {
   describe("getCurrentTimeInSeconds", () => {
@@ -25,7 +26,7 @@ describe("utils", () => {
       vi.setSystemTime(now);
 
       const futureTime = Math.floor(now.getTime() / 1000) + 300; // 5 minutes in future
-      const result = calculateRaceTime(futureTime);
+      const result = calculateRaceTime(futureTime, THRESHOLD);
 
       expect(result.timeString).toBe("5m 0s To Start");
       expect(result.shouldRemove).toBe(false);
@@ -38,7 +39,7 @@ describe("utils", () => {
       vi.setSystemTime(now);
 
       const pastTime = Math.floor(now.getTime() / 1000) - 30; // 30 seconds ago
-      const result = calculateRaceTime(pastTime);
+      const result = calculateRaceTime(pastTime, THRESHOLD);
 
       expect(result.timeString).toBe("Started 0m 30s ago");
       expect(result.shouldRemove).toBe(false);
@@ -51,7 +52,7 @@ describe("utils", () => {
       vi.setSystemTime(now);
 
       const pastTime = Math.floor(now.getTime() / 1000) - 120; // 2 minutes ago
-      const result = calculateRaceTime(pastTime);
+      const result = calculateRaceTime(pastTime, THRESHOLD);
 
       expect(result.shouldRemove).toBe(true);
       expect(result.hasStarted).toBe(true);
@@ -62,7 +63,7 @@ describe("utils", () => {
       vi.setSystemTime(now);
 
       const pastTime = Math.floor(now.getTime() / 1000) - 30; // 30 seconds ago
-      const result = calculateRaceTime(pastTime);
+      const result = calculateRaceTime(pastTime, THRESHOLD);
 
       expect(result.shouldRemove).toBe(false);
       expect(result.hasStarted).toBe(true);
@@ -83,7 +84,7 @@ describe("utils", () => {
       vi.setSystemTime(now);
 
       const pastTime = Math.floor(now.getTime() / 1000) - THRESHOLD;
-      const result = calculateRaceTime(pastTime);
+      const result = calculateRaceTime(pastTime, THRESHOLD);
 
       expect(result.shouldRemove).toBe(true);
       expect(result.hasStarted).toBe(true);

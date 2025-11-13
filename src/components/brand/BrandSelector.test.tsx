@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render } from "vitest-browser-react";
 import { BrandSelector } from "./BrandSelector";
 import { BrandProvider } from "@/context/brand";

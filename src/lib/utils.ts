@@ -27,22 +27,19 @@ export interface RaceTimeResult {
   timeDiff: number;
 }
 
-/** 
- * The threshold in seconds to determine when a race should be removed
- */
-export const THRESHOLD = 60;
-
 /**
  * Calculate the time remaining or elapsed for a race
  * @param startTimeSeconds - Race start time in seconds (Unix timestamp)
  * @param thresholdSeconds - Threshold in seconds to determine removal (default: 60s)
+ * @param currentTimeSeconds - Optional current time override (for global timer)
  * @returns RaceTimeResult with formatted string and removal flag
  */
 export function calculateRaceTime(
   startTimeSeconds: number,
-  thresholdSeconds = THRESHOLD
+  thresholdSeconds: number,
+  currentTimeSeconds?: number
 ): RaceTimeResult {
-  const nowInSeconds = getCurrentTimeInSeconds();
+  const nowInSeconds = currentTimeSeconds ?? getCurrentTimeInSeconds();
   const timeDiff = startTimeSeconds - nowInSeconds;
   const hasStarted = timeDiff <= 0;
 

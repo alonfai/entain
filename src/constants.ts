@@ -11,3 +11,8 @@ export const CATEGORY_IDS = {
  * Category names available for filtering
  */
 export type CategoryName = keyof typeof CATEGORY_IDS;
+
+/**
+ * The threshold in seconds to determine when a race should be removed
+ */
+export const THRESHOLD = 60;

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -72,7 +72,9 @@ export function RaceTable<TData, TValue>({
   limit,
 }: RaceTableProps<TData, TValue>) {
   // setup state for selected category filter dropdown select (stores the UUID)
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(initialCategoryFilter ? CATEGORY_IDS[initialCategoryFilter] : undefined);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<
+    string | undefined
+  >(initialCategoryFilter ? CATEGORY_IDS[initialCategoryFilter] : undefined);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialCategoryFilter
       ? [{ id: "category_id", value: CATEGORY_IDS[initialCategoryFilter] }]
@@ -100,6 +102,11 @@ export function RaceTable<TData, TValue>({
     },
   });
 
+  const onValueChange = useCallback((value: string) => {
+    setSelectedCategoryId(value === "all" ? undefined : value);
+    setColumnFilters(value === "all" ? [] : [{ id: "category_id", value }]);
+  }, []);
+
   const filteredRows = table.getFilteredRowModel().rows;
 
   return (
@@ -118,10 +125,7 @@ export function RaceTable<TData, TValue>({
           Filter by:
         </label>
         <Select
-          onValueChange={(value) => {
-            setSelectedCategoryId(value === "all" ? undefined : value);
-            setColumnFilters(value === "all" ? [] : [{ id: "category_id", value }]);
-          }}
+          onValueChange={onValueChange}
           value={selectedCategoryId ?? "all"}
         >
           <SelectTrigger
@@ -186,9 +190,9 @@ export function RaceTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -197,37 +201,35 @@ export function RaceTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {filteredRows?.length ? (
-              filteredRows
-                .slice(0, limit)
-                .map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="border-b transition-all duration-200"
-                    style={{
-                      backgroundColor:
-                        index % 2 === 0
-                          ? "var(--custom-surface)"
-                          : "var(--custom-bg-primary)",
-                      borderColor: "var(--custom-border)",
-                    }}
-                  >
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <TableCell
-                          key={cell.id}
-                          className="text-center py-4 px-6"
-                          style={{ color: "var(--custom-text-primary)" }}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))
+              filteredRows.slice(0, limit).map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="border-b transition-all duration-200"
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0
+                        ? "var(--custom-surface)"
+                        : "var(--custom-bg-primary)",
+                    borderColor: "var(--custom-border)",
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className="text-center py-4 px-6"
+                        style={{ color: "var(--custom-text-primary)" }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))
             ) : (
               <TableRow style={{ backgroundColor: "var(--custom-surface)" }}>
                 <TableCell

@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useGetNextRaces } from "@/hooks/useGetNextRaces";
+import { useGlobalTimer } from "@/hooks/useGlobalTimer";
 import { Spinner } from "@/components/ui/spinner";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import type { RaceSummary } from "@/types";
@@ -11,6 +12,14 @@ const LIMIT_RECORDS = 5;
 
 export function Races() {
   const { data, isLoading, error, refetch, removeExpiredRace } = useGetNextRaces();
+  
+  // Single global timer for all races
+  const currentTime = useGlobalTimer();
+
+  // Memoized callback to prevent unnecessary re-renders
+  const handleRaceExpired = useCallback((race: RaceSummary) => {
+    removeExpiredRace(race);
+  }, [removeExpiredRace]);
 
   const columns = useMemo<ColumnDef<RaceSummary>[]>(
     () => [
@@ -31,11 +40,15 @@ export function Races() {
         accessorKey: "advertised_start.seconds",
         header: "Time",
         cell: ({ row }) => (
-          <RaceTimer row={row.original} onShouldRemove={removeExpiredRace} />
+          <RaceTimer 
+            row={row.original} 
+            currentTime={currentTime}
+            onShouldRemove={handleRaceExpired} 
+          />
         ),
       },
     ],
-    [removeExpiredRace]
+    [currentTime, handleRaceExpired]
   );
 
   /**

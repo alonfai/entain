@@ -1,44 +1,49 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { calculateRaceTime, cn } from "@/lib/utils";
 import type { RaceSummary } from "@/types";
+import { THRESHOLD } from "@/constants";
 
 export interface RaceTimerProps {
   /** Race information */
   row: RaceSummary;
+  /** Current time from global timer */
+  currentTime: number;
   /** Optional callback when race should be removed (started > 1 minute ago) */
   onShouldRemove: (race: RaceSummary) => void;
 }
 
-export function RaceTimer({ row, onShouldRemove }: RaceTimerProps) {
-  const [timeRemaining, setTimeRemaining] = useState<string>("");
-  const intervalRef = useRef<number | undefined>(undefined);
+export function RaceTimer({
+  row,
+  currentTime,
+  onShouldRemove,
+}: RaceTimerProps) {
+  const hasNotifiedRef = useRef(false);
 
+  // Calculate race time using the global current time
+  const result = calculateRaceTime(
+    row.advertised_start.seconds,
+    THRESHOLD,
+    currentTime
+  );
+
+  // Handle race expiration (only notify once per race)
   useEffect(() => {
-    const startTimeSeconds = row.advertised_start.seconds;
-    const updateTimer = () => {
-      const result = calculateRaceTime(startTimeSeconds);
-      setTimeRemaining(result.timeString);
+    if (result.shouldRemove && !hasNotifiedRef.current) {
+      hasNotifiedRef.current = true;
+      onShouldRemove(row);
+    }
+  }, [result.shouldRemove, row, onShouldRemove]);
 
-      // Notify parent if race should be removed
-      if (result.shouldRemove) {
-        clearInterval(intervalRef.current);
-        onShouldRemove(row);
-      }
-    };
-
-    // Update immediately
-    updateTimer();
-
-    // Update every second of the timer
-    intervalRef.current = setInterval(updateTimer, 1000);
-
-    return () => clearInterval(intervalRef.current);
-  }, [row, onShouldRemove]);
+  // Reset notification flag if race is no longer expired (edge case)
+  useEffect(() => {
+    if (!result.shouldRemove && hasNotifiedRef.current) {
+      hasNotifiedRef.current = false;
+    }
+  }, [result.shouldRemove]);
 
   // Determine the styling based on time remaining
-  const isStartingSoon =
-    row.advertised_start.seconds * 1000 - Date.now() < 60000; // Less than 1 minute
-  const hasStarted = row.advertised_start.seconds * 1000 < Date.now();
+  const isStartingSoon = result.timeDiff < 60 && result.timeDiff > 0; // Less than 1 minute
+  const hasStarted = result.hasStarted;
 
   return (
     <span
@@ -49,7 +54,7 @@ export function RaceTimer({ row, onShouldRemove }: RaceTimerProps) {
         !isStartingSoon && !hasStarted && "bg-(--custom-success)"
       )}
     >
-      {timeRemaining}
+      {result.timeString}
     </span>
   );
 }

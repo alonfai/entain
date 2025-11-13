@@ -3,7 +3,6 @@ import { renderHook } from "vitest-browser-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as fetchNextRacesModule from "@/api/fetch-next-races";
 import type { RacesResponse } from "@/types";
-import { CATEGORY_IDS, type CategoryName } from "@/constants";
 import { useGetNextRaces } from "./useGetNextRaces";
 
 vi.mock("@/api/fetch-next-races", { spy: true });
@@ -114,27 +113,6 @@ describe("useGetNextRaces", () => {
     });
 
     expect(result.current.data).toHaveLength(2);
-  });
-
-  it("should filter races by category", async () => {
-    vi.mocked(fetchNextRacesModule.fetchNextRaces).mockResolvedValueOnce(
-      mockResponse
-    );
-    const categoryName: CategoryName = "GREYHOUND";
-
-    const { result } = await renderHook(
-      () => useGetNextRaces({ categoryName }),
-      { wrapper }
-    );
-
-    await vi.waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
-
-    expect(result.current.data).toHaveLength(1);
-    expect(result.current.data[0]?.category_id).toBe(
-      CATEGORY_IDS[categoryName]
-    );
   });
 
   it("should filter out expired races", async () => {

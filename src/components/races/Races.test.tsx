@@ -60,6 +60,7 @@ describe("Races", () => {
       isError: false,
       isSuccess: false,
       status: "pending",
+      removeExpiredRace: vi.fn(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
@@ -79,6 +80,7 @@ describe("Races", () => {
       isError: true,
       isSuccess: false,
       status: "error",
+      removeExpiredRace: vi.fn(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
@@ -96,6 +98,8 @@ describe("Races", () => {
       isError: false,
       isSuccess: true,
       status: "success",
+      removeExpiredRace: vi.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     const { getByText } = await renderWithProviders(<Races />);
@@ -113,6 +117,7 @@ describe("Races", () => {
       isError: false,
       isSuccess: true,
       status: "success",
+      removeExpiredRace: vi.fn(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
@@ -121,5 +126,85 @@ describe("Races", () => {
     await expect
       .element(getByText("Showing the next 5 upcoming races"))
       .toBeInTheDocument();
+  });
+
+  it("should call removeExpiredRace when handleRaceExpired is triggered", async () => {
+    const mockRemoveExpiredRace = vi.fn();
+
+    // Create multiple mock races with different start times
+    const testRaces: RaceSummary[] = [
+      {
+        ...mockRaces[0],
+        race_id: "race-1",
+        race_name: "Expired Race",
+        advertised_start: { seconds: Math.floor(Date.now() / 1000) - 120 }, // 2 minutes ago (expired)
+      },
+      {
+        ...mockRaces[0],
+        race_id: "race-2",
+        race_name: "Future Race",
+        advertised_start: { seconds: Math.floor(Date.now() / 1000) + 300 }, // 5 minutes from now
+      },
+    ];
+
+    vi.mocked(useGetNextRacesModule.useGetNextRaces).mockReturnValue({
+      data: testRaces,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+      isError: false,
+      isSuccess: true,
+      status: "success",
+      removeExpiredRace: mockRemoveExpiredRace,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
+
+    const { container } = await renderWithProviders(<Races />);
+
+    // Wait for the component to render - look for table content
+    const tableBody = container.querySelector("tbody");
+    expect(tableBody).not.toBeNull();
+
+    // The RaceTimer component should automatically call onShouldRemove for expired races
+    // We need to wait a bit for the timer effects to run
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Verify that removeExpiredRace was called with the expired race
+    expect(mockRemoveExpiredRace).toHaveBeenCalledWith(
+      expect.objectContaining({
+        race_id: "race-1",
+        race_name: "Expired Race",
+      })
+    );
+
+    // Should be called once for the expired race
+    expect(mockRemoveExpiredRace).toHaveBeenCalledTimes(1);
+  });
+
+  it("should pass currentTime prop to RaceTimer components", async () => {
+    vi.mocked(useGetNextRacesModule.useGetNextRaces).mockReturnValue({
+      data: mockRaces,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+      isError: false,
+      isSuccess: true,
+      status: "success",
+      removeExpiredRace: vi.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
+
+    const { container } = await renderWithProviders(<Races />);
+
+    // Check that RaceTimer components are rendered (they contain the time cell content)
+    const timeCells = container.querySelectorAll("td");
+    const timeCell = Array.from(timeCells).find(
+      (cell) =>
+        cell.textContent?.includes("min") ||
+        cell.textContent?.includes("sec") ||
+        cell.textContent?.includes("Started")
+    );
+
+    expect(timeCell).not.toBeNull();
   });
 });

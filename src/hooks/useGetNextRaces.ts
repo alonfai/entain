@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNextRaces } from "../api/fetch-next-races";
 import { calculateRaceTime } from "../lib/utils";
+import { THRESHOLD } from "../constants";
 import type { RaceSummary } from "../types";
 
 /**
@@ -21,7 +22,8 @@ export function useGetNextRaces() {
         const raceData = res.data.race_summaries[raceId];
         // Assumming race is always defined for ids in next_to_go_ids
         const { shouldRemove } = calculateRaceTime(
-          raceData.advertised_start.seconds
+          raceData.advertised_start.seconds,
+          THRESHOLD
         );
         if (!shouldRemove) {
           activeRaces.push(raceData);

@@ -92,4 +92,83 @@ describe("RaceTable", () => {
     const firstRowText = rows[0]?.textContent || "";
     expect(firstRowText).toContain("Race 1");
   });
+
+  it("should apply initialCategoryFilter to useState hooks", async () => {
+    // Create test data with different category IDs that match the constants
+    const testDataWithCategories: TestData[] = [
+      { id: "1", name: "Greyhound Race", category_id: "9daef0d7-bf3c-4f50-921d-8e818c60fe61" },
+      { id: "2", name: "Horse Race", category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae" },
+      { id: "3", name: "Harness Race", category_id: "161d9be2-e909-4326-8c2c-35ed71fb460b" },
+    ];
+
+    const { container } = await renderWithProvider(
+      <RaceTable 
+        columns={mockColumns} 
+        data={testDataWithCategories} 
+        initialCategoryFilter="GREYHOUND"
+      />
+    );
+
+    // Check that only greyhound races are shown (filtered by the initial category filter)
+    const rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBe(1);
+    
+    // Verify the correct race is displayed
+    const rowText = rows[0]?.textContent || "";
+    expect(rowText).toContain("Greyhound Race");
+    expect(rowText).not.toContain("Horse Race");
+    expect(rowText).not.toContain("Harness Race");
+
+    // Check that the filter dropdown shows the selected category
+    const selectTrigger = container.querySelector('[role="combobox"]');
+    expect(selectTrigger).toBeTruthy();
+    expect(selectTrigger?.textContent).toContain("greyhound");
+  });
+
+  it("should handle onValueChange method correctly for category filtering", async () => {
+    // Create test data with different category IDs that match the constants
+    const testDataWithCategories: TestData[] = [
+      { id: "1", name: "Greyhound Race", category_id: "9daef0d7-bf3c-4f50-921d-8e818c60fe61" },
+      { id: "2", name: "Horse Race", category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae" },
+      { id: "3", name: "Harness Race", category_id: "161d9be2-e909-4326-8c2c-35ed71fb460b" },
+    ];
+
+    const { container, getByRole } = await renderWithProvider(
+      <RaceTable columns={mockColumns} data={testDataWithCategories} />
+    );
+
+    // Initially, all races should be shown
+    let rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBe(3);
+
+    // Click on the select dropdown
+    const selectTrigger = getByRole("combobox");
+    await expect.element(selectTrigger).toBeInTheDocument();
+    await selectTrigger.click();
+
+    // Wait for options to appear and click on "horse" option
+    const horseOption = getByRole("option", { name: "horse" });
+    await expect.element(horseOption).toBeInTheDocument();
+    await horseOption.click();
+
+    // After filtering by horse category, only horse race should be shown
+    rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBe(1);
+    
+    // Verify the correct race is displayed
+    const rowText = rows[0]?.textContent || "";
+    expect(rowText).toContain("Horse Race");
+    expect(rowText).not.toContain("Greyhound Race");
+    expect(rowText).not.toContain("Harness Race");
+
+    // Open the dropdown again and select "All Categories"
+    await selectTrigger.click();
+    const allCategoriesOption = getByRole("option", { name: "All Categories" });
+    await expect.element(allCategoriesOption).toBeInTheDocument();
+    await allCategoriesOption.click();
+
+    // After selecting "All Categories", all races should be shown again
+    rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBe(3);
+  });
 });
