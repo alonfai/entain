@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useGetNextRaces } from "@/hooks/useGetNextRaces";
 import { useGlobalTimer } from "@/hooks/useGlobalTimer";
@@ -15,14 +15,6 @@ export function Races() {
 
   // Single global timer for all races
   const currentTime = useGlobalTimer();
-
-  // Memoized callback to prevent unnecessary re-renders
-  const handleRaceExpired = useCallback(
-    (race: RaceSummary) => {
-      removeExpiredRace(race);
-    },
-    [removeExpiredRace],
-  );
 
   const columns = useMemo<ColumnDef<RaceSummary>[]>(
     () => [
@@ -46,12 +38,12 @@ export function Races() {
           <RaceTimer
             row={row.original}
             currentTime={currentTime}
-            onShouldRemove={handleRaceExpired}
+            onShouldRemove={removeExpiredRace}
           />
         ),
       },
     ],
-    [currentTime, handleRaceExpired],
+    [currentTime, removeExpiredRace],
   );
 
   /**
