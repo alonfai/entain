@@ -69,6 +69,7 @@ export function Races() {
   if (error) {
     return (
       <ErrorMessage
+        className="my-8 mx-auto"
         message={error instanceof Error ? error.message : String(error)}
         showRetry={true}
         onRetry={refetch}
