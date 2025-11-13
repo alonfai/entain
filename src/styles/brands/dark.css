@@ -35,5 +35,5 @@
   /* Status text colors for proper contrast */
   --custom-success-text: oklch(0.15 0.02 145);
   --custom-warning-text: oklch(0.15 0.02 85);
-  --custom-error-text: oklch(0.95 0.01 25);
+  --custom-error-text: oklch(0.15 0.02 25);
 }
