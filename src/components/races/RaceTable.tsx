@@ -121,6 +121,7 @@ export function RaceTable<TData, TValue>({
         <Select onValueChange={onValueChange} value={selectedCategoryId ?? "all"}>
           <SelectTrigger
             className="w-[200px] border-2 rounded-md shadow-sm transition-all hover:shadow-md focus:ring-2 focus:ring-offset-2"
+            aria-label="Filter by category"
             style={{
               borderColor: "var(--custom-border)",
               backgroundColor: "var(--custom-bg-primary)",

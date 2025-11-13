@@ -30,6 +30,7 @@ export function BrandSelector() {
       <Select onValueChange={setBrand} value={brand}>
         <SelectTrigger
           className="w-40 border-2 rounded-md shadow-sm transition-all hover:shadow-md focus:ring-2 focus:ring-offset-2"
+          aria-label="Select Theme"
           style={{
             borderColor: "var(--custom-border)",
             backgroundColor: "var(--custom-bg-primary)",
