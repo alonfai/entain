@@ -19,6 +19,4 @@ export type BrandProviderState = {
   setBrand: (brand: Brand) => void;
 };
 
-export const BrandContext = createContext<BrandProviderState | null>(
-  null
-);
+export const BrandContext = createContext<BrandProviderState | null>(null);

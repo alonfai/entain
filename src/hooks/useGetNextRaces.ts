@@ -21,10 +21,7 @@ export function useGetNextRaces() {
       for (const raceId of res.data.next_to_go_ids) {
         const raceData = res.data.race_summaries[raceId];
         // Assumming race is always defined for ids in next_to_go_ids
-        const { shouldRemove } = calculateRaceTime(
-          raceData.advertised_start.seconds,
-          THRESHOLD
-        );
+        const { shouldRemove } = calculateRaceTime(raceData.advertised_start.seconds, THRESHOLD);
         if (!shouldRemove) {
           activeRaces.push(raceData);
         }
@@ -42,14 +39,12 @@ export function useGetNextRaces() {
       removedRaceIdsRef.current.add(race_id);
       queryResult.refetch();
     },
-    [queryResult]
+    [queryResult],
   );
 
   const filteredData = useMemo(() => {
     if (!queryResult.data) return [];
-    return queryResult.data.filter(
-      (race) => !removedRaceIdsRef.current.has(race.race_id)
-    );
+    return queryResult.data.filter((race) => !removedRaceIdsRef.current.has(race.race_id));
   }, [queryResult.data, removedRaceIdsRef]);
 
   return {

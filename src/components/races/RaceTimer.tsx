@@ -12,19 +12,11 @@ export interface RaceTimerProps {
   onShouldRemove: (race: RaceSummary) => void;
 }
 
-export function RaceTimer({
-  row,
-  currentTime,
-  onShouldRemove,
-}: RaceTimerProps) {
+export function RaceTimer({ row, currentTime, onShouldRemove }: RaceTimerProps) {
   const hasNotifiedRef = useRef(false);
 
   // Calculate race time using the global current time
-  const result = calculateRaceTime(
-    row.advertised_start.seconds,
-    THRESHOLD,
-    currentTime
-  );
+  const result = calculateRaceTime(row.advertised_start.seconds, THRESHOLD, currentTime);
 
   // Handle race expiration (only notify once per race)
   useEffect(() => {
@@ -51,7 +43,7 @@ export function RaceTimer({
         "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-all",
         hasStarted && "bg-(--custom-error)",
         isStartingSoon && !hasStarted && "bg-(--custom-warning)",
-        !isStartingSoon && !hasStarted && "bg-(--custom-success)"
+        !isStartingSoon && !hasStarted && "bg-(--custom-success)",
       )}
     >
       {result.timeString}

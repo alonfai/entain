@@ -37,7 +37,7 @@ export interface RaceTimeResult {
 export function calculateRaceTime(
   startTimeSeconds: number,
   thresholdSeconds: number,
-  currentTimeSeconds?: number
+  currentTimeSeconds?: number,
 ): RaceTimeResult {
   const nowInSeconds = currentTimeSeconds ?? getCurrentTimeInSeconds();
   const timeDiff = startTimeSeconds - nowInSeconds;

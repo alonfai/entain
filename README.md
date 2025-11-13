@@ -186,7 +186,7 @@ Each brand defines its own color palette using CSS custom properties with the OK
 .light {
   --custom-bg-primary: oklch(0.98 0.005 240);
   --custom-text-primary: oklch(0.25 0.02 240);
-  --custom-accent: oklch(0.55 0.20 240);
+  --custom-accent: oklch(0.55 0.2 240);
   /* ... more variables */
 }
 ```
@@ -217,7 +217,7 @@ import { useBrand } from "@/hooks/useBrand";
 
 function MyComponent() {
   const { brand, setBrand } = useBrand();
-  
+
   return (
     <button onClick={() => setBrand("dark")}>
       Current: {brand}
@@ -236,8 +236,8 @@ To add a new brand theme:
 ```css
 .blue {
   --custom-bg-primary: oklch(0.96 0.02 240);
-  --custom-text-primary: oklch(0.20 0.03 240);
-  --custom-accent: oklch(0.50 0.25 240);
+  --custom-text-primary: oklch(0.2 0.03 240);
+  --custom-accent: oklch(0.5 0.25 240);
   /* ... define all other variables */
 }
 ```

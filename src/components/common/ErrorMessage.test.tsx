@@ -10,28 +10,20 @@ describe("ErrorMessage", () => {
   it("should render with default props", async () => {
     const { getByText } = await renderWithProvider(<ErrorMessage />);
     await expect.element(getByText("Error")).toBeInTheDocument();
-    await expect
-      .element(getByText("Something went wrong. Please try again."))
-      .toBeInTheDocument();
+    await expect.element(getByText("Something went wrong. Please try again.")).toBeInTheDocument();
   });
 
   it("should render custom title and message", async () => {
     const { getByText } = await renderWithProvider(
-      <ErrorMessage title="Custom Error" message="Custom error message" />
+      <ErrorMessage title="Custom Error" message="Custom error message" />,
     );
-    await expect
-      .element(getByText("Custom Error", { exact: true }))
-      .toBeInTheDocument();
-    await expect
-      .element(getByText("Custom error message", { exact: true }))
-      .toBeInTheDocument();
+    await expect.element(getByText("Custom Error", { exact: true })).toBeInTheDocument();
+    await expect.element(getByText("Custom error message", { exact: true })).toBeInTheDocument();
   });
 
   it("should call onRetry when retry button is clicked", async () => {
     const onRetry = vi.fn();
-    const { getByRole } = await renderWithProvider(
-      <ErrorMessage onRetry={onRetry} />
-    );
+    const { getByRole } = await renderWithProvider(<ErrorMessage onRetry={onRetry} />);
 
     const retryButton = getByRole("button", { hasText: "Try Again" });
     await retryButton.click();
@@ -40,9 +32,7 @@ describe("ErrorMessage", () => {
   });
 
   it("should not show retry button when showRetry is false", async () => {
-    const { container } = await renderWithProvider(
-      <ErrorMessage showRetry={false} />
-    );
+    const { container } = await renderWithProvider(<ErrorMessage showRetry={false} />);
     const retryButton = container.querySelector("button");
     expect(retryButton).toBeNull();
   });
@@ -54,16 +44,14 @@ describe("ErrorMessage", () => {
   });
 
   it("should apply custom className", async () => {
-    const { container } = await renderWithProvider(
-      <ErrorMessage className="custom-class" />
-    );
+    const { container } = await renderWithProvider(<ErrorMessage className="custom-class" />);
     const errorDiv = container.querySelector(".custom-class");
     expect(errorDiv).not.toBeNull();
   });
 
   it("should apply className to the main container div with role alert", async () => {
     const { getByRole } = await renderWithProvider(
-      <ErrorMessage className="my-custom-error-class" />
+      <ErrorMessage className="my-custom-error-class" />,
     );
     const alertElement = getByRole("alert");
     await expect.element(alertElement).toHaveClass("my-custom-error-class");

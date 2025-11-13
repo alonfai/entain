@@ -8,7 +8,7 @@ describe("QueryProvider", () => {
     const { getByText } = await render(
       <QueryProvider>
         <div>Test Child</div>
-      </QueryProvider>
+      </QueryProvider>,
     );
 
     await expect.element(getByText("Test Child")).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe("QueryProvider", () => {
     const { getByText } = await render(
       <QueryProvider>
         <TestingComponent />
-      </QueryProvider>
+      </QueryProvider>,
     );
 
     await expect.element(getByText("Client Available")).toBeInTheDocument();

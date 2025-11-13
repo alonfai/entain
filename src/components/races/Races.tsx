@@ -12,14 +12,17 @@ const LIMIT_RECORDS = 5;
 
 export function Races() {
   const { data, isLoading, error, refetch, removeExpiredRace } = useGetNextRaces();
-  
+
   // Single global timer for all races
   const currentTime = useGlobalTimer();
 
   // Memoized callback to prevent unnecessary re-renders
-  const handleRaceExpired = useCallback((race: RaceSummary) => {
-    removeExpiredRace(race);
-  }, [removeExpiredRace]);
+  const handleRaceExpired = useCallback(
+    (race: RaceSummary) => {
+      removeExpiredRace(race);
+    },
+    [removeExpiredRace],
+  );
 
   const columns = useMemo<ColumnDef<RaceSummary>[]>(
     () => [
@@ -40,15 +43,15 @@ export function Races() {
         accessorKey: "advertised_start.seconds",
         header: "Time",
         cell: ({ row }) => (
-          <RaceTimer 
-            row={row.original} 
+          <RaceTimer
+            row={row.original}
             currentTime={currentTime}
-            onShouldRemove={handleRaceExpired} 
+            onShouldRemove={handleRaceExpired}
           />
         ),
       },
     ],
-    [currentTime, handleRaceExpired]
+    [currentTime, handleRaceExpired],
   );
 
   /**
@@ -57,7 +60,7 @@ export function Races() {
   const sortFn = useMemo(
     () => (a: RaceSummary, b: RaceSummary) =>
       a.advertised_start.seconds - b.advertised_start.seconds,
-    []
+    [],
   );
 
   if (isLoading) {

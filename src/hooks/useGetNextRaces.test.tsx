@@ -22,9 +22,7 @@ describe("useGetNextRaces", () => {
   });
 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 
   const mockResponse: RacesResponse = {
@@ -102,9 +100,7 @@ describe("useGetNextRaces", () => {
   };
 
   it("should fetch and return all races when no category is specified", async () => {
-    vi.mocked(fetchNextRacesModule.fetchNextRaces).mockResolvedValueOnce(
-      mockResponse
-    );
+    vi.mocked(fetchNextRacesModule.fetchNextRaces).mockResolvedValueOnce(mockResponse);
 
     const { result } = await renderHook(() => useGetNextRaces(), { wrapper });
 
@@ -132,9 +128,7 @@ describe("useGetNextRaces", () => {
       },
     };
 
-    vi.mocked(fetchNextRacesModule.fetchNextRaces).mockResolvedValueOnce(
-      expiredResponse
-    );
+    vi.mocked(fetchNextRacesModule.fetchNextRaces).mockResolvedValueOnce(expiredResponse);
 
     const { result } = await renderHook(() => useGetNextRaces(), { wrapper });
 
@@ -147,7 +141,7 @@ describe("useGetNextRaces", () => {
 
   it("should return empty array when data is undefined", async () => {
     vi.mocked(fetchNextRacesModule.fetchNextRaces).mockRejectedValueOnce(
-      new Error("Failed to fetch")
+      new Error("Failed to fetch"),
     );
 
     const { result } = await renderHook(() => useGetNextRaces(), { wrapper });

@@ -12,11 +12,7 @@ export type BrandProviderProps = {
 /**
  * BrandProvider component to manage and provide brand context settings for the application
  */
-export function BrandProvider({
-  children,
-  defaultBrand,
-  ...props
-}: BrandProviderProps) {
+export function BrandProvider({ children, defaultBrand, ...props }: BrandProviderProps) {
   const [brand, setBrand] = useState<Brand>(defaultBrand);
 
   // Apply theme class to document root when brand changes
@@ -40,7 +36,7 @@ export function BrandProvider({
       brand,
       setBrand,
     }),
-    [brand]
+    [brand],
   );
 
   return (

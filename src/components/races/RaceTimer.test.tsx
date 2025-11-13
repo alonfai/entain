@@ -59,7 +59,7 @@ describe("RaceTimer", () => {
         row={futureRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     await expect.element(getByText("5m 0s To Start")).toBeInTheDocument();
@@ -73,7 +73,7 @@ describe("RaceTimer", () => {
         row={pastRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     await expect.element(getByText("Started 0m 30s ago")).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe("RaceTimer", () => {
         row={futureRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     await expect.element(getByText("2m 0s To Start")).toBeInTheDocument();
@@ -98,9 +98,9 @@ describe("RaceTimer", () => {
         row={futureRace}
         currentTime={currentTimeInSeconds + 1}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
-    
+
     await expect.element(getByText("1m 59s To Start")).toBeInTheDocument();
   });
 
@@ -113,7 +113,7 @@ describe("RaceTimer", () => {
         row={expiredRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     expect(onShouldRemove).toHaveBeenCalled();
@@ -128,10 +128,10 @@ describe("RaceTimer", () => {
         row={activeRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
-    // Since the component doesn't manage its own timer, 
+    // Since the component doesn't manage its own timer,
     // we don't need to advance timers - just ensure it wasn't called initially
     expect(onShouldRemove).not.toHaveBeenCalled();
   });
@@ -145,7 +145,7 @@ describe("RaceTimer", () => {
         row={raceAboutToExpire}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Should not be called yet (59 seconds < 60 second threshold)
@@ -157,7 +157,7 @@ describe("RaceTimer", () => {
         row={raceAboutToExpire}
         currentTime={currentTimeInSeconds + 2}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Should be called once when race becomes expired
@@ -170,7 +170,7 @@ describe("RaceTimer", () => {
         row={raceAboutToExpire}
         currentTime={currentTimeInSeconds + 10}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Should still be called only once
@@ -186,7 +186,7 @@ describe("RaceTimer", () => {
         row={expiredRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Should be called initially for expired race
@@ -198,7 +198,7 @@ describe("RaceTimer", () => {
         row={expiredRace}
         currentTime={currentTimeInSeconds - 200} // Much earlier time
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Then make it expired again
@@ -207,7 +207,7 @@ describe("RaceTimer", () => {
         row={expiredRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     // Should be called again since notification flag was reset
@@ -216,7 +216,7 @@ describe("RaceTimer", () => {
 
   it("should display correct CSS classes for different race states", async () => {
     const onShouldRemove = vi.fn();
-    
+
     // Future race (more than 1 minute away)
     const futureRace = createMockRace(300); // 5 minutes
     const { container: futureContainer } = await render(
@@ -224,7 +224,7 @@ describe("RaceTimer", () => {
         row={futureRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     const futureSpan = futureContainer.querySelector("span");
@@ -237,7 +237,7 @@ describe("RaceTimer", () => {
         row={soonRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     const soonSpan = soonContainer.querySelector("span");
@@ -250,7 +250,7 @@ describe("RaceTimer", () => {
         row={startedRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     const startedSpan = startedContainer.querySelector("span");
@@ -259,7 +259,7 @@ describe("RaceTimer", () => {
 
   it("should handle exact boundary conditions", async () => {
     const onShouldRemove = vi.fn();
-    
+
     // Race that started exactly 60 seconds ago (should be removed)
     const exactlyExpiredRace = createMockRace(-60);
     await render(
@@ -267,7 +267,7 @@ describe("RaceTimer", () => {
         row={exactlyExpiredRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     expect(onShouldRemove).toHaveBeenCalledWith(exactlyExpiredRace);
@@ -280,7 +280,7 @@ describe("RaceTimer", () => {
         row={almostExpiredRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove2}
-      />
+      />,
     );
 
     expect(onShouldRemove2).not.toHaveBeenCalled();
@@ -288,7 +288,7 @@ describe("RaceTimer", () => {
 
   it("should handle zero and negative time differences correctly", async () => {
     const onShouldRemove = vi.fn();
-    
+
     // Race starting exactly now
     const nowRace = createMockRace(0);
     const { getByText } = await render(
@@ -296,7 +296,7 @@ describe("RaceTimer", () => {
         row={nowRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
 
     await expect.element(getByText("Started 0m 0s ago")).toBeInTheDocument();
@@ -309,11 +309,7 @@ describe("RaceTimer", () => {
     const race2 = createMockRace(120);
 
     const { getByText, rerender } = await render(
-      <RaceTimer
-        row={race1}
-        currentTime={currentTimeInSeconds}
-        onShouldRemove={onShouldRemove}
-      />
+      <RaceTimer row={race1} currentTime={currentTimeInSeconds} onShouldRemove={onShouldRemove} />,
     );
 
     // Initially showing race1 time
@@ -321,11 +317,7 @@ describe("RaceTimer", () => {
 
     // Change to different race
     await rerender(
-      <RaceTimer
-        row={race2}
-        currentTime={currentTimeInSeconds}
-        onShouldRemove={onShouldRemove}
-      />
+      <RaceTimer row={race2} currentTime={currentTimeInSeconds} onShouldRemove={onShouldRemove} />,
     );
 
     // Should now show race2 time
@@ -343,17 +335,17 @@ describe("RaceTimer", () => {
         row={futureRace}
         currentTime={currentTimeInSeconds}
         onShouldRemove={onShouldRemove}
-      />
+      />,
     );
-    
+
     // Should not create its own interval since it uses global timer
     expect(setIntervalSpy).not.toHaveBeenCalled();
-    
+
     unmount();
-    
+
     // Should not clear interval since it doesn't manage one
     expect(clearIntervalSpy).not.toHaveBeenCalled();
-    
+
     setIntervalSpy.mockRestore();
     clearIntervalSpy.mockRestore();
   });

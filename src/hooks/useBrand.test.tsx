@@ -17,7 +17,7 @@ describe("useBrand", () => {
 
   it("should throw error when used outside BrandProvider", async () => {
     await expect(renderHook(() => useBrand())).rejects.toThrow(
-      "useBrand must be used within a BrandProvider"
+      "useBrand must be used within a BrandProvider",
     );
   });
 });

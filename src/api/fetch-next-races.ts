@@ -21,17 +21,14 @@ export const API_DOMAIN = "/api";
 export async function fetchNextRaces(
   { count }: Params = {
     count: FETCH_BATCH_SIZE,
-  }
+  },
 ): Promise<RacesResponse> {
-  const response = await fetch(
-    `${API_DOMAIN}?method=nextraces&count=${count}`,
-    {
-      headers: {
-        method: "GET",
-        accept: "application/json",
-      },
-    }
-  );
+  const response = await fetch(`${API_DOMAIN}?method=nextraces&count=${count}`, {
+    headers: {
+      method: "GET",
+      accept: "application/json",
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch next races: ${response.statusText}`);

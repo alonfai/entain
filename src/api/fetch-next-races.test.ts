@@ -62,15 +62,12 @@ describe("fetchNextRaces", () => {
 
     const result = await fetchNextRaces();
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      `${API_DOMAIN}?method=nextraces&count=20`,
-      {
-        headers: {
-          method: "GET",
-          accept: "application/json",
-        },
-      }
-    );
+    expect(mockFetch).toHaveBeenCalledWith(`${API_DOMAIN}?method=nextraces&count=20`, {
+      headers: {
+        method: "GET",
+        accept: "application/json",
+      },
+    });
     expect(result).toEqual(mockResponse);
   });
 
@@ -83,15 +80,12 @@ describe("fetchNextRaces", () => {
 
     const result = await fetchNextRaces({ count: 50 });
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      `${API_DOMAIN}?method=nextraces&count=50`,
-      {
-        headers: {
-          method: "GET",
-          accept: "application/json",
-        },
-      }
-    );
+    expect(mockFetch).toHaveBeenCalledWith(`${API_DOMAIN}?method=nextraces&count=50`, {
+      headers: {
+        method: "GET",
+        accept: "application/json",
+      },
+    });
     expect(result).toEqual(mockResponse);
   });
 
@@ -103,7 +97,7 @@ describe("fetchNextRaces", () => {
     } as Response);
 
     await expect(fetchNextRaces()).rejects.toThrow(
-      "Failed to fetch next races: Internal Server Error"
+      "Failed to fetch next races: Internal Server Error",
     );
   });
 

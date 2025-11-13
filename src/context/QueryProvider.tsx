@@ -15,7 +15,5 @@ const queryClient = new QueryClient({
  * Wrapper component to provide React Query context access
  */
 export function QueryProvider({ children }: PropsWithChildren) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

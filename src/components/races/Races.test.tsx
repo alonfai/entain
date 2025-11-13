@@ -48,7 +48,7 @@ describe("Races", () => {
     render(
       <QueryProvider>
         <BrandProvider defaultBrand="light">{ui}</BrandProvider>
-      </QueryProvider>
+      </QueryProvider>,
     );
 
   it("should show loading spinner when loading", async () => {
@@ -123,9 +123,7 @@ describe("Races", () => {
 
     const { getByText } = await renderWithProviders(<Races />);
 
-    await expect
-      .element(getByText("Showing the next 5 upcoming races"))
-      .toBeInTheDocument();
+    await expect.element(getByText("Showing the next 5 upcoming races")).toBeInTheDocument();
   });
 
   it("should call removeExpiredRace when handleRaceExpired is triggered", async () => {
@@ -174,7 +172,7 @@ describe("Races", () => {
       expect.objectContaining({
         race_id: "race-1",
         race_name: "Expired Race",
-      })
+      }),
     );
 
     // Should be called once for the expired race
@@ -202,7 +200,7 @@ describe("Races", () => {
       (cell) =>
         cell.textContent?.includes("min") ||
         cell.textContent?.includes("sec") ||
-        cell.textContent?.includes("Started")
+        cell.textContent?.includes("Started"),
     );
 
     expect(timeCell).not.toBeNull();

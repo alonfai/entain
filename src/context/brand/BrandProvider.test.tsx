@@ -16,7 +16,7 @@ describe("BrandProvider", () => {
     const { getByText } = await render(
       <BrandProvider defaultBrand="light">
         <div>Test Child</div>
-      </BrandProvider>
+      </BrandProvider>,
     );
 
     await expect.element(getByText("Test Child")).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe("BrandProvider", () => {
     await render(
       <BrandProvider defaultBrand="dark">
         <div>Test</div>
-      </BrandProvider>
+      </BrandProvider>,
     );
 
     expect(document.documentElement.classList.contains("dark")).toBe(true);
@@ -41,7 +41,7 @@ describe("BrandProvider", () => {
     const { getByText } = await render(
       <BrandProvider defaultBrand="light">
         <TestComponent />
-      </BrandProvider>
+      </BrandProvider>,
     );
 
     expect(document.documentElement.classList.contains("light")).toBe(true);

@@ -33,7 +33,7 @@ describe("RaceTable", () => {
 
   it("should render table with data", async () => {
     const { getByText } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={mockData} />
+      <RaceTable columns={mockColumns} data={mockData} />,
     );
 
     await expect.element(getByText("Race 1")).toBeInTheDocument();
@@ -43,29 +43,21 @@ describe("RaceTable", () => {
 
   it("should display empty message when no data", async () => {
     const { getByText } = await renderWithProvider(
-      <RaceTable
-        columns={mockColumns}
-        data={[]}
-        emptyDataText="No races available"
-      />
+      <RaceTable columns={mockColumns} data={[]} emptyDataText="No races available" />,
     );
 
     await expect.element(getByText("No races available")).toBeInTheDocument();
   });
 
   it("should display default empty message", async () => {
-    const { getByText } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={[]} />
-    );
+    const { getByText } = await renderWithProvider(<RaceTable columns={mockColumns} data={[]} />);
 
-    await expect
-      .element(getByText("No Reace results found."))
-      .toBeInTheDocument();
+    await expect.element(getByText("No Reace results found.")).toBeInTheDocument();
   });
 
   it("should limit displayed rows when limit is provided", async () => {
     const { container } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={mockData} limit={2} />
+      <RaceTable columns={mockColumns} data={mockData} limit={2} />,
     );
 
     const rows = container.querySelectorAll("tbody tr");
@@ -74,18 +66,17 @@ describe("RaceTable", () => {
 
   it("should render filter dropdown", async () => {
     const { getByText } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={mockData} />
+      <RaceTable columns={mockColumns} data={mockData} />,
     );
 
     await expect.element(getByText("Filter by:")).toBeInTheDocument();
   });
 
   it("should apply sorting when sort function is provided", async () => {
-    const sortFn = (a: TestData, b: TestData) =>
-      a.name.localeCompare(b.name);
+    const sortFn = (a: TestData, b: TestData) => a.name.localeCompare(b.name);
 
     const { container } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={mockData} sort={sortFn} />
+      <RaceTable columns={mockColumns} data={mockData} sort={sortFn} />,
     );
 
     const rows = container.querySelectorAll("tbody tr");
@@ -102,17 +93,17 @@ describe("RaceTable", () => {
     ];
 
     const { container } = await renderWithProvider(
-      <RaceTable 
-        columns={mockColumns} 
-        data={testDataWithCategories} 
+      <RaceTable
+        columns={mockColumns}
+        data={testDataWithCategories}
         initialCategoryFilter="GREYHOUND"
-      />
+      />,
     );
 
     // Check that only greyhound races are shown (filtered by the initial category filter)
     const rows = container.querySelectorAll("tbody tr");
     expect(rows.length).toBe(1);
-    
+
     // Verify the correct race is displayed
     const rowText = rows[0]?.textContent || "";
     expect(rowText).toContain("Greyhound Race");
@@ -134,7 +125,7 @@ describe("RaceTable", () => {
     ];
 
     const { container, getByRole } = await renderWithProvider(
-      <RaceTable columns={mockColumns} data={testDataWithCategories} />
+      <RaceTable columns={mockColumns} data={testDataWithCategories} />,
     );
 
     // Initially, all races should be shown
@@ -154,7 +145,7 @@ describe("RaceTable", () => {
     // After filtering by horse category, only horse race should be shown
     rows = container.querySelectorAll("tbody tr");
     expect(rows.length).toBe(1);
-    
+
     // Verify the correct race is displayed
     const rowText = rows[0]?.textContent || "";
     expect(rowText).toContain("Horse Race");

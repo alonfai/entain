@@ -72,20 +72,17 @@ export function RaceTable<TData, TValue>({
   limit,
 }: RaceTableProps<TData, TValue>) {
   // setup state for selected category filter dropdown select (stores the UUID)
-  const [selectedCategoryId, setSelectedCategoryId] = useState<
-    string | undefined
-  >(initialCategoryFilter ? CATEGORY_IDS[initialCategoryFilter] : undefined);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(
+    initialCategoryFilter ? CATEGORY_IDS[initialCategoryFilter] : undefined,
+  );
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialCategoryFilter
       ? [{ id: "category_id", value: CATEGORY_IDS[initialCategoryFilter] }]
-      : []
+      : [],
   );
 
   // Apply sorting if provided
-  const sortedData = useMemo(
-    () => (sort ? [...data].sort(sort) : data),
-    [data, sort]
-  );
+  const sortedData = useMemo(() => (sort ? [...data].sort(sort) : data), [data, sort]);
 
   // Setup react-table instance data
   const table = useReactTable({
@@ -118,16 +115,10 @@ export function RaceTable<TData, TValue>({
           borderColor: "var(--custom-border)",
         }}
       >
-        <label
-          className="text-sm font-medium"
-          style={{ color: "var(--custom-text-secondary)" }}
-        >
+        <label className="text-sm font-medium" style={{ color: "var(--custom-text-secondary)" }}>
           Filter by:
         </label>
-        <Select
-          onValueChange={onValueChange}
-          value={selectedCategoryId ?? "all"}
-        >
+        <Select onValueChange={onValueChange} value={selectedCategoryId ?? "all"}>
           <SelectTrigger
             className="w-[200px] border-2 rounded-md shadow-sm transition-all hover:shadow-md focus:ring-2 focus:ring-offset-2"
             style={{
@@ -189,10 +180,7 @@ export function RaceTable<TData, TValue>({
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -208,9 +196,7 @@ export function RaceTable<TData, TValue>({
                   className="border-b transition-all duration-200"
                   style={{
                     backgroundColor:
-                      index % 2 === 0
-                        ? "var(--custom-surface)"
-                        : "var(--custom-bg-primary)",
+                      index % 2 === 0 ? "var(--custom-surface)" : "var(--custom-bg-primary)",
                     borderColor: "var(--custom-border)",
                   }}
                 >
@@ -221,10 +207,7 @@ export function RaceTable<TData, TValue>({
                         className="text-center py-4 px-6"
                         style={{ color: "var(--custom-text-primary)" }}
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     );
                   })}

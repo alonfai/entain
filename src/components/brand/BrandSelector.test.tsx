@@ -8,7 +8,7 @@ describe("BrandSelector", () => {
     const { getByText } = await render(
       <BrandProvider defaultBrand="light">
         <BrandSelector />
-      </BrandProvider>
+      </BrandProvider>,
     );
     await expect.element(getByText("Select Theme")).toBeInTheDocument();
   });
@@ -17,14 +17,14 @@ describe("BrandSelector", () => {
     const { getByText } = await render(
       <BrandProvider defaultBrand="dark">
         <BrandSelector />
-      </BrandProvider>
+      </BrandProvider>,
     );
     await expect.element(getByText("Dark")).toBeInTheDocument();
   });
 
   it("should throw error when used outside BrandProvider", async () => {
     await expect(() => render(<BrandSelector />)).rejects.toThrow(
-      "useBrand must be used within a BrandProvider"
+      "useBrand must be used within a BrandProvider",
     );
   });
 });
