@@ -27,7 +27,10 @@ This is a a React application that displays upcoming racing events with real-tim
 
 ### Code Quality
 
-- **ESLint** - Linting
+- **ESLint** - Linting with automatic fixes
+- **Prettier** - Code formatting with consistent style
+- **Husky** - Git hooks for automated quality checks
+- **lint-staged** - Run linters on staged files only
 - **React Compiler** - React optimization
 
 ## Project Structure
@@ -134,7 +137,15 @@ Serves the production build locally for testing. Run `npm run build` first.
 
 ### `npm run lint`
 
-Runs ESLint to check code quality and style issues across the project.
+Runs ESLint to check code quality and style issues across the project. Includes automatic fixing where possible.
+
+### `npm run format`
+
+Formats all code files using Prettier with the project's configuration settings. Ensures consistent code style across the entire codebase.
+
+### `npm run prepare`
+
+Sets up Git hooks using Husky. This script runs automatically after `npm install` to configure pre-commit hooks that run lint-staged checks.
 
 ### `npm test`
 
@@ -159,12 +170,36 @@ npm test              # Watch mode
 npm run coverage      # Generate coverage report
 ```
 
+## Git Hooks & Code Quality
+
+The project uses automated code quality checks via Git hooks:
+
+### Pre-commit Hooks
+
+Husky manages Git hooks that run automatically before each commit:
+
+- **lint-staged** - Runs on staged files only for faster execution:
+  - Prettier formatting on all staged files
+  - ESLint with auto-fix on TypeScript/TSX files
+
+### Manual Code Quality Commands
+
+```bash
+npm run format        # Format all files with Prettier
+npm run lint          # Check and fix ESLint issues
+```
+
+The lint-staged configuration in `package.json` ensures that only staged files are processed, making commits faster while maintaining code quality standards.
+
 ## Configuration Files
 
 - **vite.config.ts** - Vite build configuration, dev server, proxy, and test setup
 - **tsconfig.json** - TypeScript compiler options and path aliases
 - **eslint.config.js** - ESLint rules and plugins
 - **components.json** - shadcn/ui component configuration
+- **.prettierrc** - Prettier code formatting configuration
+- **.prettierignore** - Files and directories to exclude from Prettier formatting
+- **.husky/pre-commit** - Git pre-commit hook configuration
 - **tailwind.config.js** - Tailwind CSS configuration (if present)
 
 ## Custom Theming
