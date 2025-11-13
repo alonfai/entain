@@ -15,7 +15,7 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{ts,tsx}": "eslint --cache --fix",
+    "*.{ts,tsx}": "eslint --fix",
     "*.{ts,tsx,css,md}": "prettier --write"
   },
   "dependencies": {
