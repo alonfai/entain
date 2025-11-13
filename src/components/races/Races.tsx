@@ -82,13 +82,11 @@ export function Races() {
       <div className="mb-6">
         <h2
           className="text-3xl font-bold tracking-tight mb-2"
-          style={{ color: "var(--custom-text-primary)" }}
+          // style={{ color: "var(--custom-text-heading)" }}
         >
           Next to Jump
         </h2>
-        <p className="text-sm" style={{ color: "var(--custom-text-muted)" }}>
-          Showing the next {LIMIT_RECORDS} upcoming races
-        </p>
+        <p className="text-sm">Showing the next {LIMIT_RECORDS} upcoming races</p>
       </div>
       <RaceTable
         columns={columns}
