@@ -161,7 +161,7 @@ export function RaceTable<TData, TValue>({
         className="overflow-hidden rounded-lg border-2 shadow-lg transition-shadow hover:shadow-xl"
         style={{ borderColor: "var(--custom-border)" }}
       >
-        <Table>
+        <Table className="table-fixed w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -177,7 +177,9 @@ export function RaceTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       className="text-center font-bold text-sm tracking-wide py-4"
-                      style={{ color: "var(--custom-text-secondary)" }}
+                      style={{
+                        color: "var(--custom-text-secondary)",
+                      }}
                     >
                       {header.isPlaceholder
                         ? null
@@ -206,7 +208,9 @@ export function RaceTable<TData, TValue>({
                       <TableCell
                         key={cell.id}
                         className="text-center py-4 px-6"
-                        style={{ color: "var(--custom-text-primary)" }}
+                        style={{
+                          color: "var(--custom-text-primary)",
+                        }}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
