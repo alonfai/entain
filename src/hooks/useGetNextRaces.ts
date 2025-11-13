@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNextRaces } from "../api/fetch-next-races";
 import { calculateRaceTime } from "../lib/utils";
@@ -9,8 +9,6 @@ import type { RaceSummary } from "../types";
  * Hook to fetch next races api data based on category and target count
  */
 export function useGetNextRaces() {
-  const removedRaceIdsRef = useRef<Set<string>>(new Set());
-
   const queryResult = useQuery({
     queryKey: ["next-races"],
     queryFn: () => fetchNextRaces(),
@@ -34,22 +32,13 @@ export function useGetNextRaces() {
    * function to remove race from data by raceId
    * @param race - The race to remove
    */
-  const removeExpiredRace = useCallback(
-    ({ race_id }: RaceSummary) => {
-      removedRaceIdsRef.current.add(race_id);
-      queryResult.refetch();
-    },
-    [queryResult],
-  );
-
-  const filteredData = useMemo(() => {
-    if (!queryResult.data) return [];
-    return queryResult.data.filter((race) => !removedRaceIdsRef.current.has(race.race_id));
-  }, [queryResult.data, removedRaceIdsRef]);
+  const removeExpiredRace = useCallback(() => {
+    queryResult.refetch();
+  }, [queryResult]);
 
   return {
     ...queryResult,
-    data: filteredData,
+    data: queryResult.data ?? [],
     removeExpiredRace,
   };
 }
