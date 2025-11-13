@@ -278,6 +278,7 @@ To add a new brand theme:
 ```
 
 3.Import the stylesheet in your main CSS file or component
+
 4.Update the `Brand` type in `src/context/brand/BrandContext.tsx`:
 
 ```typescript
