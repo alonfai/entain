@@ -45,6 +45,13 @@ export function RaceTimer({ row, currentTime, onShouldRemove }: RaceTimerProps) 
         isStartingSoon && !hasStarted && "bg-(--custom-warning)",
         !isStartingSoon && !hasStarted && "bg-(--custom-success)",
       )}
+      style={{
+        color: hasStarted 
+          ? 'var(--custom-error-text)' 
+          : isStartingSoon 
+            ? 'var(--custom-warning-text)' 
+            : 'var(--custom-success-text)'
+      }}
     >
       {result.timeString}
     </span>

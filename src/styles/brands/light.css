@@ -20,7 +20,7 @@
   /* Text colors */
   --custom-text-primary: oklch(0.25 0.02 240);
   --custom-text-secondary: oklch(0.45 0.02 240);
-  --custom-text-muted: oklch(0.6 0.015 240);
+  --custom-text-muted: oklch(0.45 0.015 240);
 
   /* Accent colors */
   --custom-accent: oklch(0.55 0.2 240);
@@ -28,7 +28,12 @@
   --custom-accent-light: oklch(0.92 0.08 240);
 
   /* Status colors */
-  --custom-success: oklch(0.55 0.15 145);
+  --custom-success: oklch(0.75 0.12 145);
   --custom-warning: oklch(0.7 0.15 85);
   --custom-error: oklch(0.55 0.2 25);
+
+  /* Status text colors for proper contrast */
+  --custom-success-text: oklch(0.2 0.02 145);
+  --custom-warning-text: oklch(0.2 0.02 85);
+  --custom-error-text: oklch(0.98 0.01 25);
 }
